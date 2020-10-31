@@ -1,0 +1,1 @@
+psql -U postgres -d dhis2 -c "create extension postgis;"

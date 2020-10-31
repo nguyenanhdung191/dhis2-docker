@@ -1,0 +1,51 @@
+version: "3"
+
+services:
+  # nginx:
+  #   build: nginx
+  #   volumes:
+  #     - ./nginx/dhis2:/etc/nginx/sites-available/dhis2
+  #   ports:
+  #     - "80:80"
+  #   restart: always
+  #   networks:
+  #     - app-network
+
+  dhis2:
+    depends_on:
+      # - nginx
+      - postgresql
+    build: dhis2
+    restart: always
+    tty: true
+    ports:
+      - "80:80"
+    volumes:
+      - ./dhis2/setenv.sh:/usr/local/tomcat/bin/setenv.sh
+      - ./dhis2/server.xml:/usr/local/tomcat/conf/server.xml
+      - ./dhis2/dhis.conf:/home/dhis2/config/dhis.conf
+      - ./dhis2/dhis2.war:/usr/local/tomcat/webapps/ROOT.war
+    networks:
+      - app-network
+
+  postgresql:
+    build: postgresql
+    restart: always
+    tty: true
+    command: postgres -c config_file=/etc/postgresql.conf
+    volumes:
+      - ./postgresql/data:/var/lib/postgresql/data
+      - ./postgresql/postgresql13.conf:/etc/postgresql.conf
+      - ./postgresql/backup:/docker-entrypoint-initdb.d
+      - ./postgresql/sqls:/etc/sqls
+    ports:
+      - "5433:5432"
+    environment:
+      POSTGRES_DB: dhis2
+      POSTGRES_PASSWORD: postgres
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge

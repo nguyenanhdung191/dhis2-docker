@@ -1,0 +1,4 @@
+dhis2/dhis2.war
+postgresql/backup
+postgresql/data
+postgresql/sqls
