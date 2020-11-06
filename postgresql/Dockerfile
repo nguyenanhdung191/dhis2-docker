@@ -1,2 +1,2 @@
-FROM postgres:13
-RUN apt-get update && apt-get install -y postgresql-13-postgis-3
+FROM postgres:12
+RUN apt-get update && apt-get install -y postgresql-12-postgis-3
