@@ -12,9 +12,9 @@ services:
   #     - app-network
 
   dhis2:
-    depends_on:
-      # - nginx
-      - postgresql
+    # depends_on:
+    # - nginx
+    # - postgresql
     build: dhis2
     restart: always
     tty: true
@@ -28,24 +28,28 @@ services:
     networks:
       - app-network
 
-  postgresql:
-    build: postgresql
-    restart: always
-    tty: true
-    command: postgres -c config_file=/etc/postgresql.conf
-    volumes:
-      - ./postgresql/data:/var/lib/postgresql/data
-      - ./postgresql/postgresql13.conf:/etc/postgresql.conf
-      - ./postgresql/backup:/docker-entrypoint-initdb.d
-      - ./postgresql/sqls:/etc/sqls
-    ports:
-      - "5433:5432"
-    environment:
-      POSTGRES_DB: dhis2
-      POSTGRES_PASSWORD: postgres
-    networks:
-      - app-network
+  # postgresql:
+  #   build: postgresql
+  #   restart: always
+  #   tty: true
+  #   deploy:
+  #     resources:
+  #       limits:
+  #         cpus: "6"
+  #   command: postgres -c config_file=/etc/postgresql.conf
+  #   volumes:
+  #     - ./postgresql/data:/var/lib/postgresql/data
+  #     - ./postgresql/postgresql13.conf:/etc/postgresql.conf
+  #     - ./postgresql/backup:/docker-entrypoint-initdb.d
+  #     - ./postgresql/sqls:/etc/sqls
+  #   ports:
+  #     - "5433:5432"
+  #   environment:
+  #     POSTGRES_DB: dhis2
+  #     POSTGRES_PASSWORD: postgres
+  #   networks:
+  #     - app-network
 
 networks:
   app-network:
-    driver: bridge
+    driver: "bridge"
